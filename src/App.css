@@ -1100,3 +1100,8 @@ body {
     display: block;
   }
 }
+
+.loading {
+  text-align: center;
+  font-size: 24px;
+}
