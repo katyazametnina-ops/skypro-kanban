@@ -4,12 +4,15 @@ import App from "./App.jsx";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./modules/theme.js";
 import { GlobalStyle } from "./Global.styled.js";
+import { BrowserRouter } from "react-router-dom";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <App />
-    </ThemeProvider>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <App />
+      </ThemeProvider>
+    </BrowserRouter>
   </StrictMode>,
 );
