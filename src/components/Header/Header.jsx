@@ -8,6 +8,7 @@ import {
   HeaderNav,
   HeaderUser,
 } from "./Header.styled.js";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,7 +28,7 @@ export default function Header() {
           </HeaderLogo>
           <HeaderNav>
             <CreateButton>
-              <a href="#popNewCard">Создать новую задачу</a>
+              <Link to="/new-card">Создать новую задачу</Link>
             </CreateButton>
             <HeaderUser
               href="#user-set-target"
