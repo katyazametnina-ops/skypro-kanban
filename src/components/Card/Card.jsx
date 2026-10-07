@@ -1,24 +1,36 @@
+import {
+  CardItem,
+  CardWrapper,
+  CardGroup,
+  CardTheme,
+  CardBtn,
+  CardContent,
+  CardTitle,
+  CardDate,
+} from "./Card.styled.js";
+
 export default function Card({ topic, title, date }) {
   return (
-    <div className="cards__item">
-      <div className="cards__card card">
-        <div className="card__group">
-          <div className="card__theme _orange">
-            <p className="_orange">{topic}</p>
-          </div>
+    <CardItem>
+      <CardWrapper>
+        <CardGroup>
+          <CardTheme $topic={topic}>
+            <p>{topic}</p>
+          </CardTheme>
+
           <a href="#popBrowse" target="_self">
-            <div className="card__btn">
+            <CardBtn>
               <div></div>
               <div></div>
               <div></div>
-            </div>
+            </CardBtn>
           </a>
-        </div>
-        <div className="card__content">
+        </CardGroup>
+        <CardContent>
           <a href="" target="_blank">
-            <h3 className="card__title">{title} </h3>
+            <CardTitle>{title}</CardTitle>
           </a>
-          <div className="card__date">
+          <CardDate>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="13"
@@ -48,9 +60,9 @@ export default function Card({ topic, title, date }) {
               </defs>
             </svg>
             <p>{date}</p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </CardDate>
+        </CardContent>
+      </CardWrapper>
+    </CardItem>
   );
 }

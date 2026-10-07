@@ -1,40 +1,47 @@
 import PopUser from "../PopUser/PopUser";
 import { useState } from "react";
+import {
+  CreateButton,
+  StyledHeader,
+  HeaderBlock,
+  HeaderLogo,
+  HeaderNav,
+  HeaderUser,
+} from "./Header.styled.js";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <header className="header">
+    <StyledHeader>
       <div className="container">
-        <div className="header__block">
-          <div className="header__logo _show _light">
+        <HeaderBlock>
+          <HeaderLogo>
             <a href="" target="_self">
               <img src="images/logo.png" alt="logo" />
             </a>
-          </div>
-          <div className="header__logo _dark">
+          </HeaderLogo>
+          <HeaderLogo className="_dark">
             <a href="" target="_self">
               <img src="images/logo_dark.png" alt="logo" />
             </a>
-          </div>
-          <nav className="header__nav">
-            <button className="header__btn-main-new _hover01" id="btnMainNew">
+          </HeaderLogo>
+          <HeaderNav>
+            <CreateButton>
               <a href="#popNewCard">Создать новую задачу</a>
-            </button>
-            <a
+            </CreateButton>
+            <HeaderUser
               href="#user-set-target"
-              className="header__user _hover02"
               onClick={(event) => {
                 event.preventDefault();
                 setIsOpen((currentValue) => !currentValue);
               }}
             >
               Ivan Ivanov
-            </a>
+            </HeaderUser>
             {isOpen && <PopUser />}
-          </nav>
-        </div>
+          </HeaderNav>
+        </HeaderBlock>
       </div>
-    </header>
+    </StyledHeader>
   );
 }
