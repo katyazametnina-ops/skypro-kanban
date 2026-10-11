@@ -8,8 +8,9 @@ import {
   CardTitle,
   CardDate,
 } from "./Card.styled.js";
+import { Link } from "react-router-dom";
 
-export default function Card({ topic, title, date }) {
+export default function Card({ topic, title, date, id }) {
   return (
     <CardItem>
       <CardWrapper>
@@ -18,18 +19,17 @@ export default function Card({ topic, title, date }) {
             <p>{topic}</p>
           </CardTheme>
 
-          <a href="#popBrowse" target="_self">
+          <Link to={`/card/${id}`}>
             <CardBtn>
               <div></div>
               <div></div>
               <div></div>
             </CardBtn>
-          </a>
+          </Link>
         </CardGroup>
         <CardContent>
-          <a href="" target="_blank">
-            <CardTitle>{title}</CardTitle>
-          </a>
+          <CardTitle>{title}</CardTitle>
+
           <CardDate>
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -1,15 +1,16 @@
-import Calendar from "../Calendar/Calendar";
+import Calendar from "../components/Calendar/Calendar";
+import { Link } from "react-router-dom";
 
-export default function PopNewCard() {
+export default function NewCardPage() {
   return (
-    <div className="pop-new-card" id="popNewCard">
+    <div className="pop-new-card" id="popNewCard" style={{ display: "block" }}>
       <div className="pop-new-card__container">
         <div className="pop-new-card__block">
           <div className="pop-new-card__content">
             <h3 className="pop-new-card__ttl">Создание задачи</h3>
-            <a href="#" className="pop-new-card__close">
+            <Link to="/" className="pop-new-card__close">
               &#10006;
-            </a>
+            </Link>
             <div className="pop-new-card__wrap">
               <form
                 className="pop-new-card__form form-new"

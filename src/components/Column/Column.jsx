@@ -13,6 +13,7 @@ export default function Column({ title, cardList }) {
           .map((card) => (
             <Card
               key={card.id}
+              id={card.id}
               topic={card.topic}
               title={card.title}
               date={card.date}
