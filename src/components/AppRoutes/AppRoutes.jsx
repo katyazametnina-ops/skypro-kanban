@@ -12,7 +12,7 @@ import CardPage from "../../pages/CardPage";
 import PrivateRoute from "./PrivateRoute";
 
 export default function AppRoutes() {
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(!!localStorage.getItem("token"));
 
   return (
     <Routes>
@@ -25,7 +25,10 @@ export default function AppRoutes() {
       </Route>
 
       <Route path="/login" element={<LoginPage setIsAuth={setIsAuth} />} />
-      <Route path="/register" element={<RegisterPage />} />
+      <Route
+        path="/register"
+        element={<RegisterPage setIsAuth={setIsAuth} />}
+      />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

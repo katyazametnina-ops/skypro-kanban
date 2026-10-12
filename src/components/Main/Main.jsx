@@ -1,17 +1,30 @@
 import Column from "../Column/Column";
-import { cardList } from "../../modules/data.js";
 import { useState, useEffect } from "react";
 import { StyledMain, MainBlock, MainContent } from "./Main.styled.js";
+import { getTasks } from "../../services/tasks";
 
 export default function Main() {
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    setTimeout(() => {
-      setCards(cardList);
-      setIsLoading(false);
-    }, 2000);
+    const loadTasks = async () => {
+      try {
+        setIsLoading(true);
+        const data = await getTasks(token);
+        console.log(data.tasks);
+        setCards(data.tasks);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadTasks();
   }, []);
 
   return (
@@ -20,6 +33,8 @@ export default function Main() {
         <MainBlock>
           {isLoading ? (
             <div className="loading">Данные загружаются...</div>
+          ) : error ? (
+            <div className="error">Ошибка: {error}</div>
           ) : (
             <MainContent>
               <Column title="Без статуса" cardList={cards} />

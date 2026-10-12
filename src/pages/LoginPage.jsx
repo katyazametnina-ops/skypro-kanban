@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { signIn } from "../services/auth";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function LoginPage({ setIsAuth }) {
   const navigate = useNavigate();
@@ -54,6 +54,9 @@ export default function LoginPage({ setIsAuth }) {
         />
         <button type="submit">Войти в систему</button>
       </form>
+      <p>
+        Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
+      </p>
     </div>
   );
 }

@@ -8,3 +8,14 @@ export const getTasks = (token) => {
     },
   });
 };
+
+export const createTask = (token, taskData) => {
+  return request("/kanban", {
+    method: "POST",
+    headers: {
+      "Content-Type": "",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(taskData),
+  });
+};

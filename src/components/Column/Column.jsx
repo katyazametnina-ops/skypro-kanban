@@ -12,8 +12,8 @@ export default function Column({ title, cardList }) {
           .filter((card) => card.status === title)
           .map((card) => (
             <Card
-              key={card.id}
-              id={card.id}
+              key={card._id}
+              id={card._id}
               topic={card.topic}
               title={card.title}
               date={card.date}
