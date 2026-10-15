@@ -1,6 +1,16 @@
 import { useState } from "react";
-import { signUp } from "../services/auth";
 import { Link, useNavigate } from "react-router-dom";
+import { signUp } from "../services/auth";
+import {
+  PageWrapper,
+  AuthCard,
+  Title,
+  StyledInput,
+  SubmitButton,
+  FooterText,
+  StyledLink,
+  ErrorText,
+} from "./LoginPage.styled.js";
 
 export default function RegisterPage({ setIsAuth }) {
   const navigate = useNavigate();
@@ -35,36 +45,41 @@ export default function RegisterPage({ setIsAuth }) {
   };
 
   return (
-    <div>
-      <h1>Страница регистрации</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleRegister}>
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="Имя"
-        />
-        <input
-          type="text"
-          name="login"
-          value={formData.login}
-          onChange={handleChange}
-          placeholder="Логин"
-        />
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Пароль"
-        />
-        <button type="submit">Зарегистрироваться</button>
-      </form>
-      <p>
-        Уже есть аккаунт? <Link to="/login">Войти</Link>
-      </p>
-    </div>
+    <PageWrapper>
+      <AuthCard>
+        <Title>Регистрация</Title>
+        {error && <ErrorText>{error}</ErrorText>}
+        <form onSubmit={handleRegister}>
+          <StyledInput
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Имя"
+          />
+          <StyledInput
+            type="text"
+            name="login"
+            value={formData.login}
+            onChange={handleChange}
+            placeholder="Эл. почта"
+          />
+          <StyledInput
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Пароль"
+          />
+          <SubmitButton type="submit">Зарегистрироваться</SubmitButton>
+        </form>
+        <FooterText>
+          Уже есть аккаунт?
+          <Link to="/login">
+            <StyledLink>Войдите здесь</StyledLink>
+          </Link>
+        </FooterText>
+      </AuthCard>
+    </PageWrapper>
   );
 }

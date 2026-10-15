@@ -1,35 +1,139 @@
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useOutletContext,
+} from "react-router-dom";
+import { getTaskById, updateTask, deleteTask } from "../services/tasks";
+
+const statuses = [
+  "Без статуса",
+  "Нужно сделать",
+  "В работе",
+  "Тестирование",
+  "Готово",
+];
+
+const getTopicClass = (topic) => {
+  if (topic === "Web Design") return "_orange";
+  if (topic === "Research") return "_green";
+  if (topic === "Copywriting") return "_purple";
+  return "_orange";
+};
 
 export default function CardPage() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { loadTasks } = useOutletContext();
+  const token = localStorage.getItem("token");
+
+  const [task, setTask] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    topic: "Research",
+    status: "Без статуса",
+  });
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const loadTask = async () => {
+      try {
+        const data = await getTaskById(token, id);
+        setTask(data.task);
+        setFormData(data.task);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+    loadTask();
+  }, [id, token]);
+
+  const handleDescriptionChange = (e) => {
+    setFormData({ ...formData, description: e.target.value });
+  };
+
+  const handleStatusClick = (statusName) => {
+    if (isEditing) {
+      setFormData({ ...formData, status: statusName });
+    }
+  };
+
+  const handleEdit = (e) => {
+    e.preventDefault();
+    setIsEditing(true);
+  };
+
+  const handleCancel = (e) => {
+    e.preventDefault();
+    setFormData(task);
+    setIsEditing(false);
+  };
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    try {
+      await updateTask(token, id, formData);
+      setTask(formData);
+      setIsEditing(false);
+      await loadTasks();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    try {
+      await deleteTask(token, id);
+      await loadTasks();
+      navigate("/");
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  if (!task) {
+    return null;
+  }
+
   return (
     <div className="pop-browse" id="popBrowse" style={{ display: "block" }}>
       <div className="pop-browse__container">
         <div className="pop-browse__block">
           <div className="pop-browse__content">
+            {error && <p style={{ color: "red" }}>{error}</p>}
             <div className="pop-browse__top-block">
-              <h3 className="pop-browse__ttl">Название задачи</h3>
-              <div className="categories__theme theme-top _orange _active-category">
-                <p className="_orange">Web Design</p>
+              <h3 className="pop-browse__ttl">{task.title}</h3>
+              <div
+                className={`categories__theme theme-top ${getTopicClass(formData.topic)} _active-category`}
+              >
+                <p className={getTopicClass(formData.topic)}>
+                  {formData.topic}
+                </p>
               </div>
             </div>
             <div className="pop-browse__status status">
               <p className="status__p subttl">Статус</p>
               <div className="status__themes">
-                <div className="status__theme _hide">
-                  <p>Без статуса</p>
-                </div>
-                <div className="status__theme _gray">
-                  <p className="_gray">Нужно сделать</p>
-                </div>
-                <div className="status__theme _hide">
-                  <p>В работе</p>
-                </div>
-                <div className="status__theme _hide">
-                  <p>Тестирование</p>
-                </div>
-                <div className="status__theme _hide">
-                  <p>Готово</p>
-                </div>
+                {statuses.map((statusName) => (
+                  <div
+                    key={statusName}
+                    className={`status__theme ${
+                      formData.status === statusName ? "_gray" : "_hide"
+                    }`}
+                    onClick={() => handleStatusClick(statusName)}
+                    style={{ cursor: isEditing ? "pointer" : "default" }}
+                  >
+                    <p
+                      className={formData.status === statusName ? "_gray" : ""}
+                    >
+                      {statusName}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
             <div className="pop-browse__wrap">
@@ -46,7 +150,9 @@ export default function CardPage() {
                     className="form-browse__area"
                     name="text"
                     id="textArea01"
-                    readOnly
+                    readOnly={!isEditing}
+                    value={formData.description}
+                    onChange={handleDescriptionChange}
                     placeholder="Введите описание задачи..."
                   ></textarea>
                 </div>
@@ -143,7 +249,6 @@ export default function CardPage() {
                       </div>
                     </div>
                   </div>
-
                   <input type="hidden" id="datepick_value" value="08.09.2023" />
                   <div className="calendar__period">
                     <p className="calendar__p date-end">
@@ -156,36 +261,54 @@ export default function CardPage() {
             </div>
             <div className="theme-down__categories theme-down">
               <p className="categories__p subttl">Категория</p>
-              <div className="categories__theme _orange _active-category">
-                <p className="_orange">Web Design</p>
+              <div
+                className={`categories__theme ${getTopicClass(formData.topic)} _active-category`}
+              >
+                <p className={getTopicClass(formData.topic)}>
+                  {formData.topic}
+                </p>
               </div>
             </div>
-            <div className="pop-browse__btn-browse ">
+
+            <div
+              className={`pop-browse__btn-browse ${isEditing ? "_hide" : ""}`}
+            >
               <div className="btn-group">
                 <button className="btn-browse__edit _btn-bor _hover03">
-                  <a href="#">Редактировать задачу</a>
+                  <a href="#" onClick={handleEdit}>
+                    Редактировать задачу
+                  </a>
                 </button>
                 <button className="btn-browse__delete _btn-bor _hover03">
-                  <a href="#">Удалить задачу</a>
+                  <a href="#" onClick={handleDelete}>
+                    Удалить задачу
+                  </a>
                 </button>
               </div>
               <button className="btn-browse__close _btn-bg _hover01">
                 <Link to="/">Закрыть</Link>
               </button>
             </div>
-            <div className="pop-browse__btn-edit _hide">
+
+            <div className={`pop-browse__btn-edit ${isEditing ? "" : "_hide"}`}>
               <div className="btn-group">
                 <button className="btn-edit__edit _btn-bg _hover01">
-                  <a href="#">Сохранить</a>
+                  <a href="#" onClick={handleSave}>
+                    Сохранить
+                  </a>
                 </button>
                 <button className="btn-edit__edit _btn-bor _hover03">
-                  <a href="#">Отменить</a>
+                  <a href="#" onClick={handleCancel}>
+                    Отменить
+                  </a>
                 </button>
                 <button
                   className="btn-edit__delete _btn-bor _hover03"
                   id="btnDelete"
                 >
-                  <a href="#">Удалить задачу</a>
+                  <a href="#" onClick={handleDelete}>
+                    Удалить задачу
+                  </a>
                 </button>
               </div>
               <button className="btn-edit__close _btn-bg _hover01">

@@ -1,6 +1,16 @@
 import { useState } from "react";
-import { signIn } from "../services/auth";
 import { Link, useNavigate } from "react-router-dom";
+import { signIn } from "../services/auth";
+import {
+  PageWrapper,
+  AuthCard,
+  Title,
+  StyledInput,
+  SubmitButton,
+  FooterText,
+  StyledLink,
+  ErrorText,
+} from "./LoginPage.styled.js";
 
 export default function LoginPage({ setIsAuth }) {
   const navigate = useNavigate();
@@ -34,29 +44,35 @@ export default function LoginPage({ setIsAuth }) {
   };
 
   return (
-    <div>
-      <h1>Страница входа</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleLogin}>
-        <input
-          type="text"
-          name="login"
-          value={formData.login}
-          onChange={handleChange}
-          placeholder="Логин"
-        />
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Пароль"
-        />
-        <button type="submit">Войти в систему</button>
-      </form>
-      <p>
-        Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
-      </p>
-    </div>
+    <PageWrapper>
+      <AuthCard>
+        <Title>Вход</Title>
+        {error && <ErrorText>{error}</ErrorText>}
+        <form onSubmit={handleLogin}>
+          <StyledInput
+            type="text"
+            name="login"
+            value={formData.login}
+            onChange={handleChange}
+            placeholder="Эл. почта"
+          />
+          <StyledInput
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Пароль"
+          />
+          <SubmitButton type="submit">Войти</SubmitButton>
+        </form>
+        <FooterText>
+          Нужно зарегистрироваться?
+          <br />
+          <Link to="/register">
+            <StyledLink>Регистрируйтесь здесь</StyledLink>
+          </Link>
+        </FooterText>
+      </AuthCard>
+    </PageWrapper>
   );
 }

@@ -1,32 +1,7 @@
 import Column from "../Column/Column";
-import { useState, useEffect } from "react";
 import { StyledMain, MainBlock, MainContent } from "./Main.styled.js";
-import { getTasks } from "../../services/tasks";
 
-export default function Main() {
-  const [cards, setCards] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  const token = localStorage.getItem("token");
-
-  useEffect(() => {
-    const loadTasks = async () => {
-      try {
-        setIsLoading(true);
-        const data = await getTasks(token);
-        console.log(data.tasks);
-        setCards(data.tasks);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadTasks();
-  }, []);
-
+export default function Main({ cards, isLoading, error }) {
   return (
     <StyledMain>
       <div className="container">
