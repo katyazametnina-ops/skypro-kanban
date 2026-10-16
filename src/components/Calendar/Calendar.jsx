@@ -1,12 +1,100 @@
-export default function Calendar() {
+import { useState } from "react";
+
+const monthNames = [
+  "Январь",
+  "Февраль",
+  "Март",
+  "Апрель",
+  "Май",
+  "Июнь",
+  "Июль",
+  "Август",
+  "Сентябрь",
+  "Октябрь",
+  "Ноябрь",
+  "Декабрь",
+];
+const weekDayNames = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"];
+
+function getMondayIndex(date) {
+  const day = date.getDay();
+  return day === 0 ? 6 : day - 1;
+}
+
+function formatDate(date) {
+  const dd = String(date.getDate()).padStart(2, "0");
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const yy = String(date.getFullYear()).slice(-2);
+  return `${dd}.${mm}.${yy}`;
+}
+
+function isSameDay(a, b) {
+  return (
+    a.getDate() === b.getDate() &&
+    a.getMonth() === b.getMonth() &&
+    a.getFullYear() === b.getFullYear()
+  );
+}
+
+export default function Calendar({
+  selectedDate,
+  onSelectDate,
+  readOnly = false,
+}) {
+  const [viewDate, setViewDate] = useState(
+    selectedDate ? new Date(selectedDate) : new Date(),
+  );
+
+  const today = new Date();
+  const year = viewDate.getFullYear();
+  const month = viewDate.getMonth();
+
+  const firstDay = new Date(year, month, 1);
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const prevMonthDays = new Date(year, month, 0).getDate();
+  const startOffset = getMondayIndex(firstDay);
+
+  const cells = [];
+
+  for (let i = startOffset - 1; i >= 0; i--) {
+    cells.push({
+      day: prevMonthDays - i,
+      date: new Date(year, month - 1, prevMonthDays - i),
+      otherMonth: true,
+    });
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    cells.push({ day: d, date: new Date(year, month, d), otherMonth: false });
+  }
+  let nextDay = 1;
+  while (cells.length % 7 !== 0) {
+    cells.push({
+      day: nextDay,
+      date: new Date(year, month + 1, nextDay),
+      otherMonth: true,
+    });
+    nextDay++;
+  }
+
+  const handlePrev = () => setViewDate(new Date(year, month - 1, 1));
+  const handleNext = () => setViewDate(new Date(year, month + 1, 1));
+
+  const handleDayClick = (date) => {
+    if (readOnly) return;
+    onSelectDate(date);
+  };
+
   return (
     <div className="pop-new-card__calendar calendar">
       <p className="calendar__ttl subttl">Даты</p>
       <div className="calendar__block">
         <div className="calendar__nav">
-          <div className="calendar__month">Сентябрь 2023</div>
+          <div className="calendar__month">
+            {monthNames[month]} {year}
+          </div>
           <div className="nav__actions">
-            <div className="nav__action" data-action="prev">
+            <div className="nav__action" onClick={handlePrev}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="6"
@@ -16,7 +104,7 @@ export default function Calendar() {
                 <path d="M5.72945 1.95273C6.09018 1.62041 6.09018 1.0833 5.72945 0.750969C5.36622 0.416344 4.7754 0.416344 4.41218 0.750969L0.528487 4.32883C-0.176162 4.97799 -0.176162 6.02201 0.528487 6.67117L4.41217 10.249C4.7754 10.5837 5.36622 10.5837 5.72945 10.249C6.09018 9.9167 6.09018 9.37959 5.72945 9.04727L1.87897 5.5L5.72945 1.95273Z" />
               </svg>
             </div>
-            <div className="nav__action" data-action="next">
+            <div className="nav__action" onClick={handleNext}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="6"
@@ -30,58 +118,58 @@ export default function Calendar() {
         </div>
         <div className="calendar__content">
           <div className="calendar__days-names">
-            <div className="calendar__day-name">пн</div>
-            <div className="calendar__day-name">вт</div>
-            <div className="calendar__day-name">ср</div>
-            <div className="calendar__day-name">чт</div>
-            <div className="calendar__day-name">пт</div>
-            <div className="calendar__day-name -weekend-">сб</div>
-            <div className="calendar__day-name -weekend-">вс</div>
+            {weekDayNames.map((name, i) => (
+              <div
+                key={name}
+                className={`calendar__day-name ${i >= 5 ? "-weekend-" : ""}`}
+              >
+                {name}
+              </div>
+            ))}
           </div>
           <div className="calendar__cells">
-            <div className="calendar__cell _other-month">28</div>
-            <div className="calendar__cell _other-month">29</div>
-            <div className="calendar__cell _other-month">30</div>
-            <div className="calendar__cell _cell-day">31</div>
-            <div className="calendar__cell _cell-day">1</div>
-            <div className="calendar__cell _cell-day _weekend">2</div>
-            <div className="calendar__cell _cell-day _weekend">3</div>
-            <div className="calendar__cell _cell-day">4</div>
-            <div className="calendar__cell _cell-day">5</div>
-            <div className="calendar__cell _cell-day ">6</div>
-            <div className="calendar__cell _cell-day">7</div>
-            <div className="calendar__cell _cell-day _current">8</div>
-            <div className="calendar__cell _cell-day _weekend">9</div>
-            <div className="calendar__cell _cell-day _weekend">10</div>
-            <div className="calendar__cell _cell-day">11</div>
-            <div className="calendar__cell _cell-day">12</div>
-            <div className="calendar__cell _cell-day">13</div>
-            <div className="calendar__cell _cell-day">14</div>
-            <div className="calendar__cell _cell-day">15</div>
-            <div className="calendar__cell _cell-day _weekend">16</div>
-            <div className="calendar__cell _cell-day _weekend">17</div>
-            <div className="calendar__cell _cell-day">18</div>
-            <div className="calendar__cell _cell-day">19</div>
-            <div className="calendar__cell _cell-day">20</div>
-            <div className="calendar__cell _cell-day">21</div>
-            <div className="calendar__cell _cell-day">22</div>
-            <div className="calendar__cell _cell-day _weekend">23</div>
-            <div className="calendar__cell _cell-day _weekend">24</div>
-            <div className="calendar__cell _cell-day">25</div>
-            <div className="calendar__cell _cell-day">26</div>
-            <div className="calendar__cell _cell-day">27</div>
-            <div className="calendar__cell _cell-day">28</div>
-            <div className="calendar__cell _cell-day">29</div>
-            <div className="calendar__cell _cell-day _weekend">30</div>
-            <div className="calendar__cell _other-month _weekend">1</div>
+            {cells.map((cell, index) => {
+              const dayOfWeek = index % 7;
+              const isWeekend = dayOfWeek >= 5;
+              const isToday = isSameDay(cell.date, today);
+              const isSelected =
+                selectedDate && isSameDay(cell.date, new Date(selectedDate));
+
+              const classNames = [
+                "calendar__cell",
+                cell.otherMonth ? "_other-month" : "_cell-day",
+                isWeekend ? "_weekend" : "",
+                isToday ? "_current" : "",
+                isSelected ? "_active-day" : "",
+              ]
+                .filter(Boolean)
+                .join(" ");
+
+              return (
+                <div
+                  key={index}
+                  className={classNames}
+                  onClick={() => handleDayClick(cell.date)}
+                >
+                  {cell.day}
+                </div>
+              );
+            })}
           </div>
         </div>
-
-        <input type="hidden" id="datepick_value" value="08.09.2023" />
         <div className="calendar__period">
-          <p className="calendar__p date-end">
-            Выберите срок исполнения <span className="date-control"></span>.
-          </p>
+          {selectedDate ? (
+            <p className="calendar__p date-end">
+              Срок исполнения:{" "}
+              <span className="date-control">
+                {formatDate(new Date(selectedDate))}
+              </span>
+            </p>
+          ) : (
+            <p className="calendar__p date-end">
+              Выберите срок исполнения <span className="date-control"></span>.
+            </p>
+          )}
         </div>
       </div>
     </div>
