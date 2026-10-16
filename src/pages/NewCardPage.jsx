@@ -13,6 +13,7 @@ export default function NewCardPage() {
     description: "",
     topic: "Research",
     status: "Без статуса",
+    date: "",
   });
 
   const [error, setError] = useState("");
@@ -23,6 +24,11 @@ export default function NewCardPage() {
   };
 
   const validateForm = () => {
+    if (!formData.date) {
+      setError("Выберите срок исполнения");
+      return false;
+    }
+
     if (!formData.title.trim()) {
       setError("Введите название задачи");
       return false;
@@ -42,7 +48,7 @@ export default function NewCardPage() {
 
     try {
       await createTask(token, formData);
-      await loadTasks();
+      await loadTasks(false);
       navigate("/");
     } catch (err) {
       setError(err.message);
@@ -125,7 +131,12 @@ export default function NewCardPage() {
                   </div>
                 </div>
               </form>
-              <Calendar />
+              <Calendar
+                selectedDate={formData.date}
+                onSelectDate={(date) =>
+                  setFormData({ ...formData, date: date.toISOString() })
+                }
+              />
             </div>
             <button
               form="newTaskForm"

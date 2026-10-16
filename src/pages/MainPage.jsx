@@ -10,17 +10,20 @@ export default function MainPage() {
   const [error, setError] = useState("");
   const token = localStorage.getItem("token");
 
-  const loadTasks = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const data = await getTasks(token);
-      setCards(data.tasks);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [token]);
+  const loadTasks = useCallback(
+    async (showLoading = true) => {
+      try {
+        if (showLoading) setIsLoading(true);
+        const data = await getTasks(token);
+        setCards(data.tasks);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        if (showLoading) setIsLoading(false);
+      }
+    },
+    [token],
+  );
 
   useEffect(() => {
     loadTasks();

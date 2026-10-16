@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const PageWrapper = styled.div`
   width: 100%;
   min-height: 100vh;
-  background-color: #151419;
+  background-color: #eaeef6;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,14 +12,15 @@ export const PageWrapper = styled.div`
 export const AuthCard = styled.div`
   width: 100%;
   max-width: 368px;
-  background-color: #20202c;
+  background-color: #ffffff;
   border-radius: 10px;
   padding: 50px;
-  border: 0.7px solid #4e5566;
+  border: 0.7px solid #d4dbe5;
+  box-shadow: 0px 4px 67px -12px #00000021;
 `;
 
 export const Title = styled.h2`
-  color: #ffffff;
+  color: #000000;
   font-size: 20px;
   font-weight: 700;
   text-align: center;
@@ -31,10 +32,10 @@ export const StyledInput = styled.input`
   height: 30px;
   padding: 10px 10px;
   margin-bottom: 7px;
-  background-color: #20202c;
+  background-color: #ffffff;
   border: 0.7px solid #94a6be66;
   border-radius: 8px;
-  color: #ffffff;
+  color: #000000;
   font-size: 14px;
   outline: none;
 
@@ -45,8 +46,8 @@ export const StyledInput = styled.input`
   &:-webkit-autofill,
   &:-webkit-autofill:hover,
   &:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0px 1000px #20202c inset;
-    -webkit-text-fill-color: #ffffff;
+    -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
+    -webkit-text-fill-color: #000000;
     transition: background-color 5000s ease-in-out 0s;
   }
 `;
