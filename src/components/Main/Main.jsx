@@ -1,25 +1,15 @@
 import Column from "../Column/Column";
-import { cardList } from "../../modules/data.js";
-import { useState, useEffect } from "react";
 import { StyledMain, MainBlock, MainContent } from "./Main.styled.js";
 
-export default function Main() {
-  const [cards, setCards] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setCards(cardList);
-      setIsLoading(false);
-    }, 2000);
-  }, []);
-
+export default function Main({ cards, isLoading, error }) {
   return (
     <StyledMain>
       <div className="container">
         <MainBlock>
           {isLoading ? (
             <div className="loading">Данные загружаются...</div>
+          ) : error ? (
+            <div className="error">Ошибка: {error}</div>
           ) : (
             <MainContent>
               <Column title="Без статуса" cardList={cards} />
