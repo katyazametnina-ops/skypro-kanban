@@ -9,6 +9,7 @@ import {
   CardDate,
 } from "./Card.styled.js";
 import { Link } from "react-router-dom";
+import { formatDate } from "../../utils/formatDate";
 
 export default function Card({ topic, title, date, id }) {
   return (
@@ -59,7 +60,7 @@ export default function Card({ topic, title, date, id }) {
                 </clipPath>
               </defs>
             </svg>
-            <p>{date}</p>
+            <p>{formatDate(date)}</p>
           </CardDate>
         </CardContent>
       </CardWrapper>
