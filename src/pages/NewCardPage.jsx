@@ -1,12 +1,11 @@
-import { useState } from "react";
-import { useNavigate, Link, useOutletContext } from "react-router-dom";
-import { createTask } from "../services/tasks";
+import { useState, useContext } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { TaskContext } from "../context/TaskContext";
 import Calendar from "../components/Calendar/Calendar";
 
 export default function NewCardPage() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-  const { loadTasks } = useOutletContext();
+  const { addTask } = useContext(TaskContext);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -15,7 +14,6 @@ export default function NewCardPage() {
     status: "Без статуса",
     date: "",
   });
-
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
@@ -24,11 +22,6 @@ export default function NewCardPage() {
   };
 
   const validateForm = () => {
-    if (!formData.date) {
-      setError("Выберите срок исполнения");
-      return false;
-    }
-
     if (!formData.title.trim()) {
       setError("Введите название задачи");
       return false;
@@ -42,13 +35,9 @@ export default function NewCardPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) {
-      return;
-    }
-
+    if (!validateForm()) return;
     try {
-      await createTask(token, formData);
-      await loadTasks(false);
+      await addTask(formData);
       navigate("/");
     } catch (err) {
       setError(err.message);
@@ -61,7 +50,6 @@ export default function NewCardPage() {
         <div className="pop-new-card__block">
           <div className="pop-new-card__content">
             <h3 className="pop-new-card__ttl">Создание задачи</h3>
-
             <Link to="/" className="pop-new-card__close">
               &#10006;
             </Link>
@@ -86,7 +74,6 @@ export default function NewCardPage() {
                     onChange={handleChange}
                   />
                 </div>
-
                 <div className="form-new__block">
                   <label htmlFor="textArea" className="subttl">
                     Описание задачи
@@ -100,7 +87,6 @@ export default function NewCardPage() {
                     onChange={handleChange}
                   ></textarea>
                 </div>
-
                 <div className="pop-new-card__categories categories">
                   <p className="categories__p subttl">Категория</p>
                   <div className="categories__themes">

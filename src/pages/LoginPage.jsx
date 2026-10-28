@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signIn } from "../services/auth";
+import { AuthContext } from "../context/AuthContext";
 import {
   PageWrapper,
   AuthCard,
@@ -12,31 +12,21 @@ import {
   ErrorText,
 } from "./LoginPage.styled.js";
 
-export default function LoginPage({ setIsAuth }) {
+export default function LoginPage() {
   const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    login: "",
-    password: "",
-  });
-
+  const { login } = useContext(AuthContext);
+  const [formData, setFormData] = useState({ login: "", password: "" });
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const data = await signIn(formData);
-      localStorage.setItem("token", data.user.token);
-
-      setIsAuth(true);
+      await login(formData);
       navigate("/");
     } catch (err) {
       setError(err.message);
