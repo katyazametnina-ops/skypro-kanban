@@ -23,8 +23,21 @@ export default function LoginPage() {
     setFormData({ ...formData, [name]: value });
   };
 
+  const validateForm = () => {
+    if (!formData.login.trim()) {
+      setError("Введите логин");
+      return false;
+    }
+    if (!formData.password.trim()) {
+      setError("Введите пароль");
+      return false;
+    }
+    return true;
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
     try {
       await login(formData);
       navigate("/");
