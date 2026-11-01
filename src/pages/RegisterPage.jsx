@@ -21,6 +21,7 @@ export default function RegisterPage() {
     password: "",
   });
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,11 +47,15 @@ export default function RegisterPage() {
   const handleRegister = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
+
     try {
+      setIsSubmitting(true);
       await register(formData);
       navigate("/");
     } catch (err) {
       setError(err.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -66,6 +71,7 @@ export default function RegisterPage() {
             value={formData.name}
             onChange={handleChange}
             placeholder="Имя"
+            disabled={isSubmitting}
           />
           <StyledInput
             type="text"
@@ -73,6 +79,7 @@ export default function RegisterPage() {
             value={formData.login}
             onChange={handleChange}
             placeholder="Эл. почта"
+            disabled={isSubmitting}
           />
           <StyledInput
             type="password"
@@ -80,8 +87,18 @@ export default function RegisterPage() {
             value={formData.password}
             onChange={handleChange}
             placeholder="Пароль"
+            disabled={isSubmitting}
           />
-          <SubmitButton type="submit">Зарегистрироваться</SubmitButton>
+          <SubmitButton
+            type="submit"
+            disabled={isSubmitting}
+            style={{
+              opacity: isSubmitting ? 0.6 : 1,
+              cursor: isSubmitting ? "not-allowed" : "pointer",
+            }}
+          >
+            {isSubmitting ? "Регистрация..." : "Зарегистрироваться"}
+          </SubmitButton>
         </form>
         <FooterText>
           Уже есть аккаунт?{" "}

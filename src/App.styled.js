@@ -5,5 +5,6 @@ export const Wrapper = styled.div`
   width: 100vw;
   min-height: 100vh;
   overflow: hidden;
-  background-color: ${({ theme }) => theme.colors.bg}; /* Цвет из theme.js! */
+  background-color: ${({ theme }) => theme.colors.bg};
+  transition: background-color 0.3s ease;
 `;

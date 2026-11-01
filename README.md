@@ -1,16 +1,80 @@
-# React + Vite
+# 📋 WebDev Kanban — Таск-трекер задач
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Учебный курсовой проект на **React**, представляющий собой веб-приложение для управления задачами в формате Канбан-доски.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🌟 Основной функционал
 
-## React Compiler
+- **Авторизация и Регистрация:**
+  - Безопасный вход и регистрация пользователей с использованием REST API Skypro.
+  - Сохранение авторизации (токен и данные пользователя в `localStorage`).
+  - Защищённые роуты (Private Routes) — просмотр доски доступен только авторизованным пользователям.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Полный цикл управления задачами (CRUD):**
+  - Создание новых задач с выбором категории (`Web Design`, `Research`, `Copywriting`), описанием и датой с помощью интерактивного календаря.
+  - Редактирование существующих задач (изменение описания, даты, категории).
+  - Изменение статуса задач (перемещение по колонкам доски).
+  - Удаление задач.
 
-## Expanding the ESLint configuration
+- **Темы оформления (Light / Dark):**
+  - Переключение между светлой и тёмной темами через выпадающее меню пользователя (`PopUser`).
+  - Динамическая смена стилей с использованием `styled-components` (`ThemeProvider`).
+  - Сохранение выбранной темы индивидуально для каждого пользователя в `localStorage`.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Удобство использования (UX / UI):**
+  - Красивые и понятные всплывающие уведомления с помощью `react-toastify`.
+  - Валидация вводимых данных (защита от пробелов `.trim()`, информативные сообщения об ошибках).
+  - Защита от повторных отправк форм (блокировка кнопок в состоянии `isSubmitting`).
+  - Кастомный лоадер при загрузке данных (`Loader`).
+  - Заглушка при отсутствии задач («Новых задач нет»).
+  - Стилизованная страница 404 (Not Found) с кнопкой возврата на главную.
+  - Грамотная обработка сетевых ошибок (включая сбои сервера и `ERR_CONNECTION_RESET`).
+
+---
+
+## 🛠 Технологический стек
+
+- **Frontend:** React (Vite / CRA), JavaScript (ES6+)
+- **Стилизация:** `styled-components`, CSS3 (Flexbox, Grid)
+- **Маршрутизация:** `react-router-dom` (v6)
+- **Управление состоянием:** React Context API (`AuthContext`, `TaskContext`, `ThemeContext`)
+- **Уведомления:** `react-toastify`
+- **API:** REST API (`https://wedev-api.sky.pro/api`)
+
+---
+
+## 🚀 Запуск проекта
+
+1. **Клонировать репозиторий:**
+
+   ```bash
+   git clone <ссылка_на_твой_репозиторий>
+   cd kanban-app
+
+   ```
+
+2. **Установить зависимости:**
+   npm install
+
+3. **Запустить проект в режиме разработки:**
+   npm run dev
+
+   **или для Create React App:**
+   npm start
+
+4. **Открыть приложение в браузере по адресу: http://localhost:5173 (или http://localhost:3000).**
+
+---
+
+### 🏁 Финальные шаги в терминале (команды Git):
+
+После того как сохранишь `README.md`, останется сделать буквально 3 команды в терминале:
+
+```bash
+git add .
+git commit -m "feat: complete project and update README"
+git push
+
+
+```

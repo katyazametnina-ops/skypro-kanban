@@ -2,6 +2,17 @@ import { useState, useEffect, useRef, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { TaskContext } from "../context/TaskContext";
 import Calendar from "../components/Calendar/Calendar";
+import {
+  PopBrowse,
+  PopBrowseContainer,
+  PopBrowseBlock,
+  PopBrowseTitle,
+  SubTitle,
+  FormBrowseArea,
+  StatusTheme,
+  BtnBorder,
+  BtnBg,
+} from "./CardPage.styled.js";
 
 const statuses = [
   "Без статуса",
@@ -25,7 +36,9 @@ export default function CardPage() {
 
   const [task, setTask] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const hasFetched = useRef(false);
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -63,6 +76,7 @@ export default function CardPage() {
     e.preventDefault();
     setIsEditing(true);
   };
+
   const handleCancel = (e) => {
     e.preventDefault();
     setFormData(task);
@@ -72,69 +86,73 @@ export default function CardPage() {
   const handleSave = async (e) => {
     e.preventDefault();
     try {
+      setIsSubmitting(true);
       await editTask(id, formData);
       setTask(formData);
       setIsEditing(false);
     } catch (err) {
       setError(err.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleDelete = async (e) => {
     e.preventDefault();
     try {
+      setIsSubmitting(true);
       await removeTask(id);
       navigate("/");
     } catch (err) {
       setError(err.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   if (!task) return null;
 
   return (
-    <div className="pop-browse" id="popBrowse" style={{ display: "block" }}>
-      <div className="pop-browse__container">
-        <div className="pop-browse__block">
+    <PopBrowse id="popBrowse">
+      <PopBrowseContainer>
+        <PopBrowseBlock>
           <div className="pop-browse__content">
             {error && <p style={{ color: "red" }}>{error}</p>}
             <div className="pop-browse__top-block">
-              <h3 className="pop-browse__ttl">{task.title}</h3>
+              <PopBrowseTitle>{task.title}</PopBrowseTitle>
               <div
-                className={`categories__theme theme-top ${getTopicClass(formData.topic)} _active-category`}
+                className={`categories__theme theme-top ${getTopicClass(
+                  formData.topic,
+                )} _active-category`}
               >
                 <p className={getTopicClass(formData.topic)}>
                   {formData.topic}
                 </p>
               </div>
             </div>
+
             <div className="pop-browse__status status">
-              <p className="status__p subttl">Статус</p>
+              <SubTitle>Статус</SubTitle>
               <div className="status__themes">
-                {statuses.map((statusName) => (
-                  <div
-                    key={statusName}
-                    className={`status__theme ${
-                      isEditing
-                        ? formData.status === statusName
-                          ? "_gray"
-                          : ""
-                        : formData.status === statusName
-                          ? "_gray"
-                          : "_hide"
-                    }`}
-                    onClick={() => handleStatusClick(statusName)}
-                    style={{ cursor: isEditing ? "pointer" : "default" }}
-                  >
-                    <p
-                      className={formData.status === statusName ? "_gray" : ""}
+                {statuses.map((statusName) => {
+                  const isActive = formData.status === statusName;
+                  const isHidden = !isEditing && !isActive;
+
+                  return (
+                    <StatusTheme
+                      key={statusName}
+                      $active={isActive}
+                      $hide={isHidden}
+                      $isEditing={isEditing}
+                      onClick={() => handleStatusClick(statusName)}
                     >
-                      {statusName}
-                    </p>
-                  </div>
-                ))}
+                      <p>{statusName}</p>
+                    </StatusTheme>
+                  );
+                })}
               </div>
             </div>
+
             <div className="pop-browse__wrap">
               <form
                 className="pop-browse__form form-browse"
@@ -142,18 +160,17 @@ export default function CardPage() {
                 action="#"
               >
                 <div className="form-browse__block">
-                  <label htmlFor="textArea01" className="subttl">
-                    Описание задачи
+                  <label htmlFor="textArea01">
+                    <SubTitle>Описание задачи</SubTitle>
                   </label>
-                  <textarea
-                    className="form-browse__area"
+                  <FormBrowseArea
                     name="text"
                     id="textArea01"
                     readOnly={!isEditing}
                     value={formData.description}
                     onChange={handleDescriptionChange}
                     placeholder="Введите описание задачи..."
-                  ></textarea>
+                  />
                 </div>
               </form>
 
@@ -165,10 +182,13 @@ export default function CardPage() {
                 readOnly={!isEditing}
               />
             </div>
+
             <div className="theme-down__categories theme-down">
-              <p className="categories__p subttl">Категория</p>
+              <SubTitle>Категория</SubTitle>
               <div
-                className={`categories__theme ${getTopicClass(formData.topic)} _active-category`}
+                className={`categories__theme ${getTopicClass(
+                  formData.topic,
+                )} _active-category`}
               >
                 <p className={getTopicClass(formData.topic)}>
                   {formData.topic}
@@ -180,50 +200,47 @@ export default function CardPage() {
               className={`pop-browse__btn-browse ${isEditing ? "_hide" : ""}`}
             >
               <div className="btn-group">
-                <button className="btn-browse__edit _btn-bor _hover03">
+                <BtnBorder disabled={isSubmitting}>
                   <a href="#" onClick={handleEdit}>
                     Редактировать задачу
                   </a>
-                </button>
-                <button className="btn-browse__delete _btn-bor _hover03">
+                </BtnBorder>
+                <BtnBorder disabled={isSubmitting}>
                   <a href="#" onClick={handleDelete}>
-                    Удалить задачу
+                    {isSubmitting ? "Удаление..." : "Удалить задачу"}
                   </a>
-                </button>
+                </BtnBorder>
               </div>
-              <button className="btn-browse__close _btn-bg _hover01">
+              <BtnBg disabled={isSubmitting}>
                 <Link to="/">Закрыть</Link>
-              </button>
+              </BtnBg>
             </div>
 
             <div className={`pop-browse__btn-edit ${isEditing ? "" : "_hide"}`}>
               <div className="btn-group">
-                <button className="btn-edit__edit _btn-bg _hover01">
+                <BtnBg disabled={isSubmitting}>
                   <a href="#" onClick={handleSave}>
-                    Сохранить
+                    {isSubmitting ? "Сохранение..." : "Сохранить"}
                   </a>
-                </button>
-                <button className="btn-edit__edit _btn-bor _hover03">
+                </BtnBg>
+                <BtnBorder disabled={isSubmitting}>
                   <a href="#" onClick={handleCancel}>
                     Отменить
                   </a>
-                </button>
-                <button
-                  className="btn-edit__delete _btn-bor _hover03"
-                  id="btnDelete"
-                >
+                </BtnBorder>
+                <BtnBorder id="btnDelete" disabled={isSubmitting}>
                   <a href="#" onClick={handleDelete}>
-                    Удалить задачу
+                    {isSubmitting ? "Удаление..." : "Удалить задачу"}
                   </a>
-                </button>
+                </BtnBorder>
               </div>
-              <button className="btn-edit__close _btn-bg _hover01">
+              <BtnBg disabled={isSubmitting}>
                 <Link to="/">Закрыть</Link>
-              </button>
+              </BtnBg>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </PopBrowseBlock>
+      </PopBrowseContainer>
+    </PopBrowse>
   );
 }

@@ -17,6 +17,7 @@ export default function LoginPage() {
   const { login } = useContext(AuthContext);
   const [formData, setFormData] = useState({ login: "", password: "" });
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,11 +39,15 @@ export default function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
+
     try {
+      setIsSubmitting(true);
       await login(formData);
       navigate("/");
     } catch (err) {
       setError(err.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -58,6 +63,7 @@ export default function LoginPage() {
             value={formData.login}
             onChange={handleChange}
             placeholder="Эл. почта"
+            disabled={isSubmitting}
           />
           <StyledInput
             type="password"
@@ -65,8 +71,18 @@ export default function LoginPage() {
             value={formData.password}
             onChange={handleChange}
             placeholder="Пароль"
+            disabled={isSubmitting}
           />
-          <SubmitButton type="submit">Войти</SubmitButton>
+          <SubmitButton
+            type="submit"
+            disabled={isSubmitting}
+            style={{
+              opacity: isSubmitting ? 0.6 : 1,
+              cursor: isSubmitting ? "not-allowed" : "pointer",
+            }}
+          >
+            {isSubmitting ? "Вход..." : "Войти"}
+          </SubmitButton>
         </form>
         <FooterText>
           Нужно зарегистрироваться?

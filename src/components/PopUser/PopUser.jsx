@@ -1,21 +1,36 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import { ThemeContext } from "../../context/ThemeContext";
+import {
+  PopUserSet,
+  PopUserName,
+  PopUserMail,
+  PopUserTheme,
+  PopUserButton,
+} from "./PopUser.styled.js";
 
 export default function PopUser() {
+  const { user } = useContext(AuthContext);
+  const { themeMode, toggleTheme } = useContext(ThemeContext);
+
   return (
-    <div
-      className="header__pop-user-set pop-user-set"
-      id="user-set-target"
-      style={{ display: "block" }}
-    >
-      <p className="pop-user-set__name">Ivan Ivanov</p>
-      <p className="pop-user-set__mail">ivan.ivanov@gmail.com</p>
-      <div className="pop-user-set__theme">
+    <PopUserSet id="user-set-target">
+      <PopUserName>{user?.name || "Пользователь"}</PopUserName>
+      <PopUserMail>{user?.email || "email"}</PopUserMail>
+      <PopUserTheme>
         <p>Темная тема</p>
-        <input type="checkbox" className="checkbox" name="checkbox" />
-      </div>
-      <button type="button" className="_hover03">
+        <input
+          type="checkbox"
+          className="checkbox"
+          name="checkbox"
+          checked={themeMode === "dark"}
+          onChange={toggleTheme}
+        />
+      </PopUserTheme>
+      <PopUserButton type="button">
         <Link to="/exit">Выйти</Link>
-      </button>
-    </div>
+      </PopUserButton>
+    </PopUserSet>
   );
 }

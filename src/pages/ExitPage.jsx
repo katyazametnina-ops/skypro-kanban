@@ -1,6 +1,15 @@
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import {
+  PopExit,
+  PopExitContainer,
+  PopExitBlock,
+  PopExitTtl,
+  PopExitFormGroup,
+  ExitYesButton,
+  ExitNoButton,
+} from "./ExitPage.styled.js";
 
 export default function ExitPage() {
   const navigate = useNavigate();
@@ -8,33 +17,29 @@ export default function ExitPage() {
 
   const handleLogout = (e) => {
     e.preventDefault();
-    logout(); // очищает токен и меняет isAuth на false
+    logout();
     navigate("/login");
   };
 
   return (
-    <div className="pop-exit" id="popExit" style={{ display: "block" }}>
-      <div className="pop-exit__container">
-        <div className="pop-exit__block">
-          <div className="pop-exit__ttl">
+    <PopExit id="popExit">
+      <PopExitContainer>
+        <PopExitBlock>
+          <PopExitTtl>
             <h2>Выйти из аккаунта?</h2>
-          </div>
-          <form className="pop-exit__form" id="formExit" action="#">
-            <div className="pop-exit__form-group">
-              <button
-                className="pop-exit__exit-yes _hover01"
-                id="exitYes"
-                onClick={handleLogout}
-              >
-                <span>Да, выйти</span>
-              </button>
-              <button className="pop-exit__exit-no _hover03" id="exitNo">
+          </PopExitTtl>
+          <form id="formExit" action="#">
+            <PopExitFormGroup>
+              <ExitYesButton id="exitYes" onClick={handleLogout}>
+                Да, выйти
+              </ExitYesButton>
+              <ExitNoButton id="exitNo">
                 <Link to="/">Нет, остаться</Link>
-              </button>
-            </div>
+              </ExitNoButton>
+            </PopExitFormGroup>
           </form>
-        </div>
-      </div>
-    </div>
+        </PopExitBlock>
+      </PopExitContainer>
+    </PopExit>
   );
 }
