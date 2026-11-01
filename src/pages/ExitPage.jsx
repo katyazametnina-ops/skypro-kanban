@@ -1,10 +1,14 @@
+import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
-export default function ExitPage({ setIsAuth }) {
+export default function ExitPage() {
   const navigate = useNavigate();
+  const { logout } = useContext(AuthContext);
+
   const handleLogout = (e) => {
     e.preventDefault();
-    setIsAuth(false);
+    logout(); // очищает токен и меняет isAuth на false
     navigate("/login");
   };
 

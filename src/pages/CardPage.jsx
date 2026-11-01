@@ -1,11 +1,6 @@
-import { useState, useEffect, useRef } from "react";
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useOutletContext,
-} from "react-router-dom";
-import { getTaskById, updateTask, deleteTask } from "../services/tasks";
+import { useState, useEffect, useRef, useContext } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { TaskContext } from "../context/TaskContext";
 import Calendar from "../components/Calendar/Calendar";
 
 const statuses = [
@@ -26,8 +21,7 @@ const getTopicClass = (topic) => {
 export default function CardPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { loadTasks } = useOutletContext();
-  const token = localStorage.getItem("token");
+  const { fetchTaskById, editTask, removeTask } = useContext(TaskContext);
 
   const [task, setTask] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -47,7 +41,7 @@ export default function CardPage() {
 
     const loadTask = async () => {
       try {
-        const data = await getTaskById(token, id);
+        const data = await fetchTaskById(id);
         setTask(data.task);
         setFormData(data.task);
       } catch (err) {
@@ -55,23 +49,20 @@ export default function CardPage() {
       }
     };
     loadTask();
-  }, [id, token]);
+  }, [id, fetchTaskById]);
 
   const handleDescriptionChange = (e) => {
     setFormData({ ...formData, description: e.target.value });
   };
 
   const handleStatusClick = (statusName) => {
-    if (isEditing) {
-      setFormData({ ...formData, status: statusName });
-    }
+    if (isEditing) setFormData({ ...formData, status: statusName });
   };
 
   const handleEdit = (e) => {
     e.preventDefault();
     setIsEditing(true);
   };
-
   const handleCancel = (e) => {
     e.preventDefault();
     setFormData(task);
@@ -81,10 +72,9 @@ export default function CardPage() {
   const handleSave = async (e) => {
     e.preventDefault();
     try {
-      await updateTask(token, id, formData);
+      await editTask(id, formData);
       setTask(formData);
       setIsEditing(false);
-      await loadTasks(false);
     } catch (err) {
       setError(err.message);
     }
@@ -93,17 +83,14 @@ export default function CardPage() {
   const handleDelete = async (e) => {
     e.preventDefault();
     try {
-      await deleteTask(token, id);
-      await loadTasks(false);
+      await removeTask(id);
       navigate("/");
     } catch (err) {
       setError(err.message);
     }
   };
 
-  if (!task) {
-    return null;
-  }
+  if (!task) return null;
 
   return (
     <div className="pop-browse" id="popBrowse" style={{ display: "block" }}>
@@ -169,6 +156,7 @@ export default function CardPage() {
                   ></textarea>
                 </div>
               </form>
+
               <Calendar
                 selectedDate={formData.date}
                 onSelectDate={(date) =>

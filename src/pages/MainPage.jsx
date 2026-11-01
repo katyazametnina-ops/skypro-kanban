@@ -1,29 +1,11 @@
 import Header from "../components/Header/Header";
 import Main from "../components/Main/Main";
 import { Outlet } from "react-router-dom";
-import { useState, useEffect, useCallback } from "react";
-import { getTasks } from "../services/tasks";
+import { useContext, useEffect } from "react";
+import { TaskContext } from "../context/TaskContext";
 
 export default function MainPage() {
-  const [cards, setCards] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
-  const token = localStorage.getItem("token");
-
-  const loadTasks = useCallback(
-    async (showLoading = true) => {
-      try {
-        if (showLoading) setIsLoading(true);
-        const data = await getTasks(token);
-        setCards(data.tasks);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        if (showLoading) setIsLoading(false);
-      }
-    },
-    [token],
-  );
+  const { loadTasks } = useContext(TaskContext);
 
   useEffect(() => {
     loadTasks();
@@ -31,9 +13,9 @@ export default function MainPage() {
 
   return (
     <>
-      <Outlet context={{ loadTasks }} />
+      <Outlet />
       <Header />
-      <Main cards={cards} isLoading={isLoading} error={error} />
+      <Main />
     </>
   );
 }

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signUp } from "../services/auth";
+import { AuthContext } from "../context/AuthContext";
 import {
   PageWrapper,
   AuthCard,
@@ -12,32 +12,42 @@ import {
   ErrorText,
 } from "./LoginPage.styled.js";
 
-export default function RegisterPage({ setIsAuth }) {
+export default function RegisterPage() {
   const navigate = useNavigate();
-
+  const { register } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     name: "",
     login: "",
     password: "",
   });
-
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const validateForm = () => {
+    if (!formData.name.trim()) {
+      setError("Введите имя");
+      return false;
+    }
+    if (!formData.login.trim()) {
+      setError("Введите логин");
+      return false;
+    }
+    if (!formData.password.trim()) {
+      setError("Введите пароль");
+      return false;
+    }
+    return true;
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
     try {
-      const data = await signUp(formData);
-      localStorage.setItem("token", data.user.token);
-
-      setIsAuth(true);
+      await register(formData);
       navigate("/");
     } catch (err) {
       setError(err.message);
@@ -74,9 +84,9 @@ export default function RegisterPage({ setIsAuth }) {
           <SubmitButton type="submit">Зарегистрироваться</SubmitButton>
         </form>
         <FooterText>
-          Уже есть аккаунт?
+          Уже есть аккаунт?{" "}
           <Link to="/login">
-            <StyledLink>Войдите здесь</StyledLink>
+            <StyledLink>Войти здесь</StyledLink>
           </Link>
         </FooterText>
       </AuthCard>
