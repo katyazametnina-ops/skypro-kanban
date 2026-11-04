@@ -18,26 +18,19 @@ export default function NewCardPage() {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const isFormValid =
+    formData.title.trim() !== "" &&
+    formData.description.trim() !== "" &&
+    Boolean(formData.date);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const validateForm = () => {
-    if (!formData.title.trim()) {
-      setError("Введите название задачи");
-      return false;
-    }
-    if (!formData.description.trim()) {
-      setError("Введите описание задачи");
-      return false;
-    }
-    return true;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!isFormValid) return;
 
     try {
       setIsSubmitting(true);
@@ -130,10 +123,11 @@ export default function NewCardPage() {
             <S.FormNewSubmit
               form="newTaskForm"
               type="submit"
-              disabled={isSubmitting}
+              disabled={!isFormValid || isSubmitting}
               style={{
-                opacity: isSubmitting ? 0.6 : 1,
-                cursor: isSubmitting ? "not-allowed" : "pointer",
+                opacity: !isFormValid || isSubmitting ? 0.5 : 1,
+                cursor:
+                  !isFormValid || isSubmitting ? "not-allowed" : "pointer",
               }}
             >
               {isSubmitting ? "Создание..." : "Создать задачу"}

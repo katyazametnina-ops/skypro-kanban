@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { AuthContext } from "../context/AuthContext";
 import {
   PageWrapper,
@@ -26,11 +27,15 @@ export default function LoginPage() {
 
   const validateForm = () => {
     if (!formData.login.trim()) {
-      setError("Введите логин");
+      const msg = "Введите логин";
+      setError(msg);
+      toast.error(msg);
       return false;
     }
     if (!formData.password.trim()) {
-      setError("Введите пароль");
+      const msg = "Введите пароль";
+      setError(msg);
+      toast.error(msg);
       return false;
     }
     return true;
@@ -42,10 +47,18 @@ export default function LoginPage() {
 
     try {
       setIsSubmitting(true);
+      setError("");
       await login(formData);
+      toast.success("Добро пожаловать!");
       navigate("/");
     } catch (err) {
-      setError(err.message);
+      const errorMessage =
+        err.message === "Failed to fetch"
+          ? "Ошибка соединения с сервером"
+          : "Неверный логин или пароль";
+
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

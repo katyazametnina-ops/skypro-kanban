@@ -36,6 +36,10 @@ export const PopBrowseBlock = styled.div`
   border: 0.7px solid rgba(148, 166, 190, 0.4);
   position: relative;
   transition: background-color 0.3s ease;
+
+  /* Защита от дурака: за запираем длинный текст внутри блока модалки */
+  word-break: break-word;
+  overflow-wrap: break-word;
 `;
 
 export const PopBrowseTitle = styled.h3`
@@ -43,6 +47,10 @@ export const PopBrowseTitle = styled.h3`
   font-size: 20px;
   font-weight: 600;
   line-height: 24px;
+
+  /* Защита от дурака: перенос длинных слов в заголовке */
+  word-break: break-word;
+  overflow-wrap: break-word;
 `;
 
 export const SubTitle = styled.p`
@@ -68,6 +76,10 @@ export const FormBrowseArea = styled.textarea`
   margin-top: 14px;
   height: 200px;
   resize: none;
+
+  /* Защита от дурака: перенос символов внутри текстового поля и скролл при необходимости */
+  word-break: break-word;
+  overflow-y: auto;
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.gray};

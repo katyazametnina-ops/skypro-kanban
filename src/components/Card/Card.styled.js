@@ -32,6 +32,9 @@ export const CardWrapper = styled.div`
   padding: 15px 13px 19px;
   transition: background-color 0.3s ease;
 
+  overflow: hidden;
+  word-break: break-word;
+
   @media screen and (max-width: 1200px) {
     width: 220px;
     height: 130px;
@@ -85,11 +88,13 @@ export const CardBtn = styled.div`
 `;
 
 export const CardContent = styled.div`
+  width: 100%;
   height: 64px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
+  overflow: hidden;
 `;
 
 export const CardTitle = styled.h3`
@@ -98,6 +103,13 @@ export const CardTitle = styled.h3`
   line-height: 18px;
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: 10px;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
 `;
 
 export const CardDate = styled.div`
