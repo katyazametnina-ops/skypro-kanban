@@ -1,5 +1,8 @@
+import { useState, useContext } from "react";
+import { Link } from "react-router-dom";
 import PopUser from "../PopUser/PopUser";
-import { useState } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { ThemeContext } from "../../context/ThemeContext";
 import {
   CreateButton,
   StyledHeader,
@@ -8,22 +11,26 @@ import {
   HeaderNav,
   HeaderUser,
 } from "./Header.styled.js";
-import { Link } from "react-router-dom";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useContext(AuthContext);
+  const { themeMode } = useContext(ThemeContext);
+
   return (
     <StyledHeader>
       <div className="container">
         <HeaderBlock>
           <HeaderLogo>
             <a href="" target="_self">
-              <img src="images/logo.png" alt="logo" />
-            </a>
-          </HeaderLogo>
-          <HeaderLogo className="_dark">
-            <a href="" target="_self">
-              <img src="images/logo_dark.png" alt="logo" />
+              <img
+                src={
+                  themeMode === "light"
+                    ? "images/logo.png"
+                    : "images/logo_dark.png"
+                }
+                alt="logo"
+              />
             </a>
           </HeaderLogo>
           <HeaderNav>
@@ -37,7 +44,7 @@ export default function Header() {
                 setIsOpen((currentValue) => !currentValue);
               }}
             >
-              Ivan Ivanov
+              {user?.name || "Пользователь"}
             </HeaderUser>
             {isOpen && <PopUser />}
           </HeaderNav>

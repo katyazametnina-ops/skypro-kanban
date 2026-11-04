@@ -1,29 +1,10 @@
 import styled from "styled-components";
 
-export const CreateButton = styled.button`
-  width: 178px;
-  height: 30px;
-  border-radius: 4px;
-  background-color: #565eef;
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
-  transition: 0.3s;
-
-  &:hover {
-    background-color: #33399b;
-  }
-
-  a {
-    color: #ffffff;
-    text-decoration: none;
-  }
-`;
-
 export const StyledHeader = styled.header`
   width: 100%;
   margin: 0 auto;
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.headerBg};
+  transition: background-color 0.3s ease;
 `;
 
 export const HeaderBlock = styled.div`
@@ -57,6 +38,26 @@ export const HeaderNav = styled.nav`
   gap: 20px;
 `;
 
+export const CreateButton = styled.button`
+  width: 178px;
+  height: 30px;
+  border-radius: 4px;
+  background-color: #565eef;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+
+  &:hover {
+    background-color: #33399b;
+  }
+
+  a {
+    color: #ffffff;
+    text-decoration: none;
+  }
+`;
+
 export const HeaderUser = styled.a`
   height: 20px;
   display: flex;
@@ -65,7 +66,7 @@ export const HeaderUser = styled.a`
   justify-content: center;
   font-size: 14px;
   line-height: 20px;
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.text};
 
   &::after {
     content: "";
@@ -73,8 +74,8 @@ export const HeaderUser = styled.a`
     width: 6px;
     height: 6px;
     border-radius: 1px;
-    border-left: 1.9px solid ${({ theme }) => theme.colors.primary};
-    border-bottom: 1.9px solid ${({ theme }) => theme.colors.primary};
+    border-left: 1.9px solid ${({ theme }) => theme.colors.text};
+    border-bottom: 1.9px solid ${({ theme }) => theme.colors.text};
     transform: rotate(-45deg);
     margin: -6px 0 0 5px;
     padding: 0;

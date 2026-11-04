@@ -4,7 +4,7 @@ export const StyledColumn = styled.div`
   width: 20%;
   margin: 0 auto;
   display: block;
-
+  color: ${({ theme }) => theme.colors.text};
   @media screen and (max-width: 1200px) {
     width: 100%;
     margin: 0 auto;

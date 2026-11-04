@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CalendarWrap } from "./Calendar.styled.js";
 
 const monthNames = [
   "Январь",
@@ -86,7 +87,7 @@ export default function Calendar({
   };
 
   return (
-    <div className="pop-new-card__calendar calendar">
+    <CalendarWrap className="pop-new-card__calendar calendar">
       <p className="calendar__ttl subttl">Даты</p>
       <div className="calendar__block">
         <div className="calendar__nav">
@@ -101,7 +102,7 @@ export default function Calendar({
                 height="11"
                 viewBox="0 0 6 11"
               >
-                <path d="M5.72945 1.95273C6.09018 1.62041 6.09018 1.0833 5.72945 0.750969C5.36622 0.416344 4.7754 0.416344 4.41218 0.750969L0.528487 4.32883C-0.176162 4.97799 -0.176162 6.02201 0.528487 6.67117L4.41217 10.249C4.7754 10.5837 5.36622 10.5837 5.72945 10.249C6.09018 9.9167 6.09018 9.37959 5.72945 9.04727L1.87897 5.5L5.72945 1.95273Z" />
+                <path d="M5.72945 1.95273C6.09018 1.62041 6.09018 1.0833 5.72945 0.750969C5.36622 0.416344 4.7754 0.416344 4.41218 0.750969L0.528487 4.32883C-0.176162 4.97799 -0.176162 6.02201 0.528487 6.67117L4.41217 10.249C4.7754 10.5837 5.36622 10.5837 5.72945 10.249C6.09018 9.37959 6.09018 9.37959 5.72945 9.04727L1.87897 5.5L5.72945 1.95273Z" />
               </svg>
             </div>
             <div className="nav__action" onClick={handleNext}>
@@ -172,6 +173,6 @@ export default function Calendar({
           )}
         </div>
       </div>
-    </div>
+    </CalendarWrap>
   );
 }
