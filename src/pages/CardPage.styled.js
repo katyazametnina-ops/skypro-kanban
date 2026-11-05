@@ -37,7 +37,6 @@ export const PopBrowseBlock = styled.div`
   position: relative;
   transition: background-color 0.3s ease;
 
-  /* Защита от дурака: за запираем длинный текст внутри блока модалки */
   word-break: break-word;
   overflow-wrap: break-word;
 `;
@@ -48,7 +47,6 @@ export const PopBrowseTitle = styled.h3`
   font-weight: 600;
   line-height: 24px;
 
-  /* Защита от дурака: перенос длинных слов в заголовке */
   word-break: break-word;
   overflow-wrap: break-word;
 `;
@@ -77,7 +75,6 @@ export const FormBrowseArea = styled.textarea`
   height: 200px;
   resize: none;
 
-  /* Защита от дурака: перенос символов внутри текстового поля и скролл при необходимости */
   word-break: break-word;
   overflow-y: auto;
 
