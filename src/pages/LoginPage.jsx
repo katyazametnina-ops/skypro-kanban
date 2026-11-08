@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { AuthContext } from "../context/AuthContext";
 import {
   PageWrapper,
@@ -17,6 +18,7 @@ export default function LoginPage() {
   const { login } = useContext(AuthContext);
   const [formData, setFormData] = useState({ login: "", password: "" });
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,11 +27,15 @@ export default function LoginPage() {
 
   const validateForm = () => {
     if (!formData.login.trim()) {
-      setError("Введите логин");
+      const msg = "Введите логин";
+      setError(msg);
+      toast.error(msg);
       return false;
     }
     if (!formData.password.trim()) {
-      setError("Введите пароль");
+      const msg = "Введите пароль";
+      setError(msg);
+      toast.error(msg);
       return false;
     }
     return true;
@@ -38,11 +44,23 @@ export default function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
+
     try {
+      setIsSubmitting(true);
+      setError("");
       await login(formData);
+      toast.success("Добро пожаловать!");
       navigate("/");
     } catch (err) {
-      setError(err.message);
+      const errorMessage =
+        err.message === "Failed to fetch"
+          ? "Ошибка соединения с сервером"
+          : "Неверный логин или пароль";
+
+      setError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -58,6 +76,7 @@ export default function LoginPage() {
             value={formData.login}
             onChange={handleChange}
             placeholder="Эл. почта"
+            disabled={isSubmitting}
           />
           <StyledInput
             type="password"
@@ -65,8 +84,18 @@ export default function LoginPage() {
             value={formData.password}
             onChange={handleChange}
             placeholder="Пароль"
+            disabled={isSubmitting}
           />
-          <SubmitButton type="submit">Войти</SubmitButton>
+          <SubmitButton
+            type="submit"
+            disabled={isSubmitting}
+            style={{
+              opacity: isSubmitting ? 0.6 : 1,
+              cursor: isSubmitting ? "not-allowed" : "pointer",
+            }}
+          >
+            {isSubmitting ? "Вход..." : "Войти"}
+          </SubmitButton>
         </form>
         <FooterText>
           Нужно зарегистрироваться?

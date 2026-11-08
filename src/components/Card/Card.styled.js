@@ -30,23 +30,21 @@ export const CardWrapper = styled.div`
   align-items: flex-start;
   justify-content: stretch;
   padding: 15px 13px 19px;
+  transition: background-color 0.3s ease;
+
+  overflow: hidden;
+  word-break: break-word;
 
   @media screen and (max-width: 1200px) {
     width: 220px;
     height: 130px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: stretch;
-    padding: 15px 13px 19px;
+    background-color: ${({ theme }) => theme.colors.cardBg};
   }
 `;
 
 export const CardGroup = styled.div`
   width: 100%;
-  height: 20px;
+  height: 30px;
   margin-bottom: 12px;
   display: flex;
   align-items: center;
@@ -55,16 +53,19 @@ export const CardGroup = styled.div`
 
 export const CardTheme = styled.div`
   width: auto;
-  height: 20px;
-  padding: 5px 14px;
+  height: 30px;
+  padding: 0 14px;
   border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   background-color: ${({ $topic, theme }) => getTopicColors($topic, theme).bg};
 
   p {
     font-size: 10px;
     font-weight: 600;
-    line-height: 10px;
+    line-height: 1;
     color: ${({ $topic, theme }) => getTopicColors($topic, theme).text};
   }
 `;
@@ -87,19 +88,28 @@ export const CardBtn = styled.div`
 `;
 
 export const CardContent = styled.div`
+  width: 100%;
   height: 64px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
+  overflow: hidden;
 `;
 
 export const CardTitle = styled.h3`
   font-size: 14px;
   font-weight: 500;
   line-height: 18px;
-  color: ${({ theme }) => theme.colors.dark};
+  color: ${({ theme }) => theme.colors.text};
   margin-bottom: 10px;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
 `;
 
 export const CardDate = styled.div`

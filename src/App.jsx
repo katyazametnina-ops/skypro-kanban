@@ -1,18 +1,18 @@
 import { Wrapper } from "./App.styled.js";
 import AppRoutes from "./components/AppRoutes/AppRoutes.jsx";
-import { AuthProvider } from "./context/AuthProvider.jsx";
 import { TaskProvider } from "./context/TaskProvider.jsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 function App() {
   return (
-    <AuthProvider>
-      <TaskProvider>
-        <Wrapper>
-          <AppRoutes />
-        </Wrapper>
-      </TaskProvider>
-    </AuthProvider>
+    <TaskProvider>
+      <Wrapper>
+        <AppRoutes />
+        <ToastContainer position="top-center" autoClose={3000} />
+      </Wrapper>
+    </TaskProvider>
   );
 }
 

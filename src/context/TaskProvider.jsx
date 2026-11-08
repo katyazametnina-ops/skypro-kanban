@@ -1,6 +1,7 @@
 import { useState, useCallback, useContext } from "react";
 import { TaskContext } from "./TaskContext";
 import { AuthContext } from "./AuthContext";
+import { toast } from "react-toastify";
 import {
   getTasks,
   createTask,
@@ -19,10 +20,12 @@ export const TaskProvider = ({ children }) => {
     async (showLoading = true) => {
       try {
         if (showLoading) setIsLoading(true);
+        setError("");
         const data = await getTasks(token);
         setTasks(data.tasks);
       } catch (err) {
         setError(err.message);
+        toast.error(err.message);
       } finally {
         if (showLoading) setIsLoading(false);
       }
@@ -31,21 +34,46 @@ export const TaskProvider = ({ children }) => {
   );
 
   const addTask = async (taskData) => {
-    await createTask(token, taskData);
-    await loadTasks(false);
+    try {
+      await createTask(token, taskData);
+      toast.success("Задача успешно создана!");
+      await loadTasks(false);
+    } catch (err) {
+      toast.error(err.message);
+      throw err;
+    }
   };
 
   const editTask = async (id, taskData) => {
-    await updateTask(token, id, taskData);
-    await loadTasks(false);
+    try {
+      await updateTask(token, id, taskData);
+      toast.success("Изменения сохранены!");
+      await loadTasks(false);
+    } catch (err) {
+      toast.error(err.message);
+      throw err;
+    }
   };
 
   const removeTask = async (id) => {
-    await deleteTask(token, id);
-    await loadTasks(false);
+    try {
+      await deleteTask(token, id);
+      toast.info("Задача удалена");
+      await loadTasks(false);
+    } catch (err) {
+      toast.error(err.message);
+      throw err;
+    }
   };
 
-  const fetchTaskById = (id) => getTaskById(token, id);
+  const fetchTaskById = async (id) => {
+    try {
+      return await getTaskById(token, id);
+    } catch (err) {
+      toast.error(err.message);
+      throw err;
+    }
+  };
 
   return (
     <TaskContext.Provider
